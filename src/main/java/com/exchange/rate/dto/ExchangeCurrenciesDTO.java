@@ -23,4 +23,5 @@ public class ExchangeDTO {
         this.amount = amount;
         this.convertToAmount = convertToAmount;
     }
+
 }
