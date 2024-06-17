@@ -9,6 +9,5 @@ public interface CurrenciesRepository extends JpaRepository<Currencies, Integer>
 
     Currencies findByCode(String code);
 
-    void deleteByCode(String code);
 
 }

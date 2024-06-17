@@ -2,35 +2,36 @@ package com.exchange.rate.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter @Getter
 @Entity
 @Table(name = "Rate")
+@NoArgsConstructor
 public class ExchangeRate {
 
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "Base", referencedColumnName = "ID")
-    private Currencies baseCurrencyId;
+    private Currencies baseCurrency;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "Target", referencedColumnName = "ID")
-    private Currencies targetCurrencyId;
+    private Currencies targetCurrency;
 
     @Column(name = "Rate")
     private Double rate;
 
-    public ExchangeRate() {
-    }
-
-    public ExchangeRate( Currencies baseCurrencyId, Currencies targetCurrencyId, Double rate) {
-        this.baseCurrencyId = baseCurrencyId;
-        this.targetCurrencyId = targetCurrencyId;
+    public ExchangeRate(Currencies baseCurrencyId, Currencies targetCurrencyId, Double rate) {
+        this.baseCurrency = baseCurrencyId;
+        this.targetCurrency = targetCurrencyId;
         this.rate = rate;
     }
+
+
 }

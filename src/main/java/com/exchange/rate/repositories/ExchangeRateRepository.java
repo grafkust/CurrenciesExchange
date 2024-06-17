@@ -13,7 +13,6 @@ public interface ExchangeRateRepository extends JpaRepository<ExchangeRate, Inte
 
     ExchangeRate findExchangeRateByBaseCurrencyId_CodeAndTargetCurrencyId_Code(String baseCode, String targetCode);
 
-    void deleteByBaseCurrencyId_IdAndTargetCurrencyId_Id(int bas, int target);
 
 
 

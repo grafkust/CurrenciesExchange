@@ -8,6 +8,7 @@ import java.util.List;
 public class ErrorMessageBuilder {
 
     public String errorMsg(BindingResult bindingResult){
+
         StringBuilder errorMsg = new StringBuilder();
         List<FieldError> errors = bindingResult.getFieldErrors();
         for (FieldError error : errors)

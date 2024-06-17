@@ -1,10 +1,10 @@
 package com.exchange.rate.controller;
 
-import com.exchange.rate.dto.ExchangeDTO;
+import com.exchange.rate.dto.ExchangeCurrenciesDTO;
 import com.exchange.rate.services.ExchangeCurrenciesService;
 import com.exchange.rate.util.AllErrorResponse;
 import com.exchange.rate.util.customExceptions.CodeNotFoundException;
-import com.exchange.rate.util.customExceptions.CodePairNotFoundException;
+import com.exchange.rate.util.customExceptions.ExchangeNotPossibleException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ public class ExchangeCurrenciesController {
     }
 
     @GetMapping
-    public ExchangeDTO exchange(@RequestParam Map<String,String> params) {
+    public ExchangeCurrenciesDTO exchange(@RequestParam Map<String,String> params) {
 
         String baseCode = params.get("from");
         String targetCode = params.get("to");
@@ -36,15 +36,15 @@ public class ExchangeCurrenciesController {
     @ExceptionHandler
     private ResponseEntity<AllErrorResponse> handleException(CodeNotFoundException e){
         AllErrorResponse response = new AllErrorResponse(
-                "This code doesn't exist", LocalDateTime.now()
+                "One of codes doesn't exist", LocalDateTime.now()
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    private ResponseEntity<AllErrorResponse> handleException(CodePairNotFoundException e){
+    private ResponseEntity<AllErrorResponse> handleException(ExchangeNotPossibleException e){
         AllErrorResponse response = new AllErrorResponse(
-                "Is not possible to exchange these currencies", LocalDateTime.now()
+                "Exchange of these currencies is not possible.", LocalDateTime.now()
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }

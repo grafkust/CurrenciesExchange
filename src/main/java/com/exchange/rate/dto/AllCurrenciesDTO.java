@@ -7,11 +7,11 @@ import java.util.List;
 
 @Setter
 @Getter
-public class CurrenciesResponse {
+public class AllCurrenciesDTO {
 
-    private List<CurrenciesDTO> currencies;
+    private List<CurrenciesDTO> allCurrencies;
 
-    public CurrenciesResponse(List<CurrenciesDTO> currencies) {
-        this.currencies = currencies;
+    public AllCurrenciesDTO(List<CurrenciesDTO> currencies) {
+        this.allCurrencies = currencies;
     }
 }

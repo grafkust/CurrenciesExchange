@@ -8,10 +8,10 @@ import lombok.Setter;
 public class ExchangeRateDTO {
 
     @NotNull(message = "Exchange rate base currency shouldn't be empty")
-    private CurrenciesDTO baseCurrencyDTO;
+    private CurrenciesDTO baseCurrency;
 
     @NotNull(message = "Exchange rate target currency shouldn't be empty")
-    private CurrenciesDTO targetCurrencyDTO;
+    private CurrenciesDTO targetCurrency;
 
     @NotNull(message = "Exchange rate shouldn't be empty")
     private Double rate;

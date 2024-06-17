@@ -6,11 +6,11 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter @Setter
-public class ExchangeResponse {
+public class AllExchangeRateDTO {
 
-    private List<ExchangeRateDTO> exchangeRate;
+    private List<ExchangeRateDTO> AllExchangeRate;
 
-    public ExchangeResponse(List<ExchangeRateDTO> exchange) {
-        this.exchangeRate = exchange;
+    public AllExchangeRateDTO(List<ExchangeRateDTO> exchange) {
+        this.AllExchangeRate = exchange;
     }
 }
