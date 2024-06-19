@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter @Setter
 @NotNull
-public class CurrenciesDTO {
+public class CurrenciesDto {
 
     @NotBlank
     @Size(min = 3, max = 3, message = "code size should be 3 symbols")

@@ -1,19 +1,20 @@
 package com.exchange.rate.controller;
 
-import com.exchange.rate.dto.ExchangeCurrenciesDTO;
-import com.exchange.rate.services.ExchangeCurrenciesService;
-import com.exchange.rate.util.AllErrorResponse;
-import com.exchange.rate.util.customExceptions.CodeNotFoundException;
-import com.exchange.rate.util.customExceptions.ExchangeNotPossibleException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.exchange.rate.customInterface.CurrenciesExceptionHandler;
+import com.exchange.rate.customInterface.ExchangeRateExceptionHandler;
+import com.exchange.rate.dto.ExchangeCurrenciesDto;
+import com.exchange.rate.service.ExchangeCurrenciesService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/exchange")
+@CurrenciesExceptionHandler
+@ExchangeRateExceptionHandler
 public class ExchangeCurrenciesController {
 
     private final ExchangeCurrenciesService exchangeCurrenciesService;
@@ -23,7 +24,7 @@ public class ExchangeCurrenciesController {
     }
 
     @GetMapping
-    public ExchangeCurrenciesDTO exchange(@RequestParam Map<String,String> params) {
+    public ExchangeCurrenciesDto exchange(@RequestParam Map<String,String> params) {
 
         String baseCode = params.get("from");
         String targetCode = params.get("to");
@@ -33,21 +34,8 @@ public class ExchangeCurrenciesController {
     }
 
 
-    @ExceptionHandler
-    private ResponseEntity<AllErrorResponse> handleException(CodeNotFoundException e){
-        AllErrorResponse response = new AllErrorResponse(
-                "One of codes doesn't exist", LocalDateTime.now()
-        );
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
 
-    @ExceptionHandler
-    private ResponseEntity<AllErrorResponse> handleException(ExchangeNotPossibleException e){
-        AllErrorResponse response = new AllErrorResponse(
-                "Exchange of these currencies is not possible.", LocalDateTime.now()
-        );
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
+
 
 
 

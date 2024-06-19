@@ -1,22 +1,21 @@
 package com.exchange.rate.controller;
 
-import com.exchange.rate.dto.AllExchangeRateDTO;
-import com.exchange.rate.dto.ExchangeRateDTO;
-import com.exchange.rate.dto.RateDTO;
-import com.exchange.rate.services.ExchangeRateService;
-import com.exchange.rate.util.AllErrorResponse;
+import com.exchange.rate.customInterface.ExchangeRateExceptionHandler;
+import com.exchange.rate.dto.AllExchangeRateDto;
+import com.exchange.rate.dto.ExchangeRateDto;
+import com.exchange.rate.dto.RateDto;
+import com.exchange.rate.service.ExchangeRateService;
 import com.exchange.rate.util.ErrorMessageBuilder;
-import com.exchange.rate.util.customExceptions.*;
+import com.exchange.rate.util.customException.NotValidRequestException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
 @RestController
 @RequestMapping("/exchangeRate")
+@ExchangeRateExceptionHandler
 public class ExchangeRateController {
 
    private final ExchangeRateService exchangeRateService;
@@ -28,28 +27,28 @@ public class ExchangeRateController {
     }
 
     @GetMapping
-    public AllExchangeRateDTO findAll(){
+    public AllExchangeRateDto findAll(){
         return exchangeRateService.findAll();
     }
 
     @GetMapping("/findByBaseCode/{code}")
-    public AllExchangeRateDTO findByBaseCode(@PathVariable(name = "code") String code){
+    public AllExchangeRateDto findByBaseCode(@PathVariable(name = "code") String code){
         return exchangeRateService.findByBaseCode(code);
     }
 
     @GetMapping("/findByCodePair/{codePair}")
-    public ExchangeRateDTO findByCodePair (@PathVariable(name = "codePair") String codePair){
-        return exchangeRateService.findDTOByCodePair(codePair);
+    public ExchangeRateDto findByCodePair (@PathVariable(name = "codePair") String codePair){
+        return exchangeRateService.convertToExchangeRateDTO(exchangeRateService.findByCodePair(codePair));
     }
 
     @PatchMapping
-    public ExchangeRateDTO update (@Valid @RequestBody RateDTO rateDTO, BindingResult bindingResult) {
+    public ExchangeRateDto update (@Valid @RequestBody RateDto rateDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
-            throw new RateIsEmptyException(errorMsgBuilder.errorMsg(bindingResult));
+            throw new NotValidRequestException(errorMsgBuilder.errorMsg(bindingResult));
 
         exchangeRateService.update(rateDTO);
         String codePair = rateDTO.getBaseCurrenciesCode()+rateDTO.getTargetCurrenciesCode();
-        return exchangeRateService.findDTOByCodePair(codePair);
+        return exchangeRateService.convertToExchangeRateDTO(exchangeRateService.findByCodePair(codePair));
     }
 
     @DeleteMapping("/{codePair}")
@@ -59,84 +58,17 @@ public class ExchangeRateController {
     }
 
     @PostMapping
-    public ExchangeRateDTO save (@Valid @RequestBody RateDTO rateDTO, BindingResult bindingResult){
+    public ExchangeRateDto save (@Valid @RequestBody RateDto rateDTO, BindingResult bindingResult){
 
         if (bindingResult.hasErrors())
-            throw new ExchangeRateNotValidException(errorMsgBuilder.errorMsg(bindingResult));
+            throw new NotValidRequestException(errorMsgBuilder.errorMsg(bindingResult));
 
         exchangeRateService.save(rateDTO);
         String codePair = rateDTO.getBaseCurrenciesCode()+rateDTO.getTargetCurrenciesCode();
-        return exchangeRateService.findDTOByCodePair(codePair);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<AllErrorResponse> handleException(NoDataException e){
-        AllErrorResponse response = new AllErrorResponse(
-                "There is no data about exchange rates", LocalDateTime.now());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<AllErrorResponse> handleException(ExchangeRateWithCurrentBaseCodeNotExist e){
-        AllErrorResponse response = new AllErrorResponse(
-                "Exchange rate with current Base code doesn't exist", LocalDateTime.now());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-    @ExceptionHandler
-    private ResponseEntity<AllErrorResponse> handleException(CurrenciesIsIdenticalException e){
-        AllErrorResponse response = new AllErrorResponse(
-                "You can't save two identical currencies", LocalDateTime.now());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return exchangeRateService.convertToExchangeRateDTO(exchangeRateService.findByCodePair(codePair));
     }
 
 
-    @ExceptionHandler
-    private ResponseEntity<AllErrorResponse> handleException(CodePairNotFoundException e){
-        AllErrorResponse response = new AllErrorResponse(
-                "Exchange rate with current code pair doesn't exist", LocalDateTime.now());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
 
-    @ExceptionHandler
-    private ResponseEntity<AllErrorResponse> handleException(ExchangeRateNotValidException e){
-        AllErrorResponse response = new AllErrorResponse(
-                e.getMessage(), LocalDateTime.now());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<AllErrorResponse> handleException(CodePairIsAlreadyExistException e){
-        AllErrorResponse response = new AllErrorResponse(
-                "Exchange rate with this code pair is already exist", LocalDateTime.now());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<AllErrorResponse> handleException(RateIsEmptyException e){
-        AllErrorResponse response = new AllErrorResponse(
-                e.getMessage(), LocalDateTime.now());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<AllErrorResponse> handleException(BothCurrenciesNotFoundException e){
-        AllErrorResponse response = new AllErrorResponse(
-                "These currencies doesn't exist", LocalDateTime.now());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<AllErrorResponse> handleException(BaseCurrenciesIsNotExistException e){
-        AllErrorResponse response = new AllErrorResponse(
-                "Base currency doesn't exist", LocalDateTime.now());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<AllErrorResponse> handleException(TargetCurrenciesIsNotExistException e){
-        AllErrorResponse response = new AllErrorResponse(
-                "Target currency doesn't exist", LocalDateTime.now());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
 
 }

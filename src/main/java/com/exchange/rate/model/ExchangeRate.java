@@ -1,4 +1,4 @@
-package com.exchange.rate.models;
+package com.exchange.rate.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

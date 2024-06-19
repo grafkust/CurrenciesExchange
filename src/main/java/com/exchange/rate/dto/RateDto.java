@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class RateDTO {
+public class RateDto {
 
     @NotBlank
     @Size(min = 3, max = 3, message = "code size should be 3 symbols")

@@ -6,13 +6,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class ExchangeCurrenciesDTO {
+public class ExchangeCurrenciesDto {
 
     @NotNull
-    private CurrenciesDTO baseCurrency;
+    private CurrenciesDto baseCurrency;
 
     @NotNull
-    private CurrenciesDTO targetCurrency;
+    private CurrenciesDto targetCurrency;
 
     @NotNull
     private Double rate;
@@ -24,7 +24,7 @@ public class ExchangeCurrenciesDTO {
     @NotNull
     private Double convertToAmount;
 
-    public ExchangeCurrenciesDTO(CurrenciesDTO baseCurrency, CurrenciesDTO targetCurrency, Double rate, Double amount, Double convertToAmount) {
+    public ExchangeCurrenciesDto(CurrenciesDto baseCurrency, CurrenciesDto targetCurrency, Double rate, Double amount, Double convertToAmount) {
         this.baseCurrency = baseCurrency;
         this.targetCurrency = targetCurrency;
         this.rate = rate;
@@ -32,6 +32,6 @@ public class ExchangeCurrenciesDTO {
         this.convertToAmount = convertToAmount;
     }
 
-    public ExchangeCurrenciesDTO() {
+    public ExchangeCurrenciesDto() {
     }
 }

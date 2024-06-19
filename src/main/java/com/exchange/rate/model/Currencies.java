@@ -1,28 +1,26 @@
-package com.exchange.rate.models;
+package com.exchange.rate.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Entity
 @Table(name = "Currencies")
+@Getter @Setter
 public class Currencies  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
     private Integer id;
 
     @Column(name = "Code")
-    @Getter @Setter
     private String code;
 
     @Column(name = "Name")
-    @Getter @Setter
     private String fullName;
 
     @Column(name = "Sign")
-    @Getter @Setter
     private String sign;
 
 
