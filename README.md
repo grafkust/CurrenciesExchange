@@ -10,7 +10,6 @@ REST API приложение для описания валют и обменн
 - Java
 - MySQL
 - Hibernate 
-- паттерн MVC
 - REST API, JSON
 - Maven
 ## Логика работы приложения
